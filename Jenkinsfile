@@ -4,7 +4,7 @@ pipeline{
         stage("Docker Build"){
             steps{
                 echo "======== build image ========"
-                sh 'docker build -t vikash32/helloworlddemo:0.1'
+                sh 'docker build -t vikash32/helloworlddemo:0.1 .'
             }
         }
     }
