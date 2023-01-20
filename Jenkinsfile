@@ -51,6 +51,7 @@ pipeline{
         }
         success{
             echo "========pipeline executed successfully ========"
+            archiveArtifacts artifacts: 'target/*.jar', fingerprint: true
         }
         failure{
             echo "========pipeline execution failed========"
