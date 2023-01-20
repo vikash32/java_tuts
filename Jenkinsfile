@@ -7,9 +7,16 @@ pipeline{
         daysToKeepStr: '', numToKeepStr: '')
     }
     stages{
-        stage("A"){
+        stage("Clean"){
             steps{
-                echo "========executing A========"
+                echo "========== Clean ============="
+                sh 'mvn clean'
+            }
+        }
+        stage("Compile"){
+            steps{
+                echo "========compiling========"
+                sh 'mvn compile'
             }
             post{
                 always{
@@ -23,9 +30,15 @@ pipeline{
                 }
             }
         }
+        stage("Packaging"){
+            steps{
+                echo "============= Packaging ==============="
+                sh 'mvn package'
+            }
+        }
         stage("OnlyAtDev"){
             when {
-                branch "^(?!master)"
+                branch "dev*"
             }
             steps {
                 sh 'date'
