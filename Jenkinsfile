@@ -7,9 +7,16 @@ pipeline{
         daysToKeepStr: '', numToKeepStr: '')
     }
     stages{
-        stage("A"){
+        stage("Clean"){
             steps{
-                echo "========executing A========"
+                echo "========== Clean ============="
+                sh 'mvn clean'
+            }
+        }
+        stage("Compile"){
+            steps{
+                echo "========compiling========"
+                sh 'mvn compile'
             }
             post{
                 always{
@@ -22,6 +29,10 @@ pipeline{
                     echo "========A execution failed========"
                 }
             }
+        }
+        stage("Packaging"){
+            echo "============= Packaging ==============="
+            sh 'mvn package'
         }
         stage("OnlyAtDev"){
             when {
