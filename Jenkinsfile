@@ -1,47 +1,10 @@
 pipeline{
-    agent{
-        label "linux"
-    }
-    options {
-        buildDiscarder logRotator(artifactDaysToKeepStr: '', artifactNumToKeepStr: '5', 
-        daysToKeepStr: '', numToKeepStr: '')
-    }
+    agent none
     stages{
-        stage("Clean"){
+        stage("Docker Build"){
             steps{
-                echo "========== Clean ============="
-                sh 'mvn clean'
-            }
-        }
-        stage("Compile"){
-            steps{
-                echo "========compiling========"
-                sh 'mvn compile'
-            }
-            post{
-                always{
-                    echo "========always========"
-                }
-                success{
-                    echo "========A executed successfully========"
-                }
-                failure{
-                    echo "========A execution failed========"
-                }
-            }
-        }
-        stage("Packaging"){
-            steps{
-                echo "============= Packaging ==============="
-                sh 'mvn package'
-            }
-        }
-        stage("OnlyAtDev"){
-            when {
-                branch "dev*"
-            }
-            steps {
-                sh 'date'
+                echo "======== build image ========"
+                sh 'docker build -t vikash32/helloworlddemo:0.1'
             }
         }
     }
@@ -51,7 +14,10 @@ pipeline{
         }
         success{
             echo "========pipeline executed successfully ========"
-            archiveArtifacts artifacts: 'target/*.jar', fingerprint: true
+            withCredentials([usernamePassword(credentialsId: 'dockerHub', passwordVariable: 'dockerHubPassword', usernameVariable: 'dockerHubUser')]) {
+        	sh "docker login -u ${env.dockerHubUser} -p ${env.dockerHubPassword}"
+            sh 'docker push vikash32/helloworlddemo:0.1'
+        }
         }
         failure{
             echo "========pipeline execution failed========"
