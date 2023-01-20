@@ -31,8 +31,10 @@ pipeline{
             }
         }
         stage("Packaging"){
-            echo "============= Packaging ==============="
-            sh 'mvn package'
+            steps{
+                echo "============= Packaging ==============="
+                sh 'mvn package'
+            }
         }
         stage("OnlyAtDev"){
             when {
