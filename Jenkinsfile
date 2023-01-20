@@ -23,6 +23,16 @@ pipeline{
                 }
             }
         }
+        stage("OnlyAtDev"){
+            when {
+                not {
+                    branch "master"
+                }
+            }
+            steps {
+                sh 'date'
+            }
+        }
     }
     post{
         always{
