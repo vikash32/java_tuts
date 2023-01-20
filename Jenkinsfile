@@ -25,9 +25,7 @@ pipeline{
         }
         stage("OnlyAtDev"){
             when {
-                not {
-                    branch "master"
-                }
+                branch "^(?!master)"
             }
             steps {
                 sh 'date'
