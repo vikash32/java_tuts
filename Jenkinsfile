@@ -1,6 +1,18 @@
 pipeline{
     agent any
     stages{
+        stage("Maven Clean") {
+            steps{
+                echo "================ Maven Clean =============="
+                sh 'mvn clean'
+            }
+        }
+        stage("Maven package") {
+            steps{
+                echo "================ Maven Clean =============="
+                sh 'mvn package'
+            }
+        }
         stage("Docker Build"){
             steps{
                 echo "======== build image ========"
